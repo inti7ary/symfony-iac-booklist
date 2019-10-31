@@ -1,0 +1,54 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %} {{user.username}} {% endblock %}
+
+{%block body %} 
+
+
+
+<div id='profile-card' class="card bg-light" style="max-width: 620px;">
+<div class="row no-gutters jumbotron">
+  <div class="col-md-6">
+    <img src='{{asset(user.imgUrl)}}' class="card-img" alt="...">
+    
+
+
+
+  </div>
+  <div class="col-md-5 ">
+    <div class="card-body">
+      <h3 class="card-title">{{user.username}}</h3>
+      <p class="card-text {{role_helper.getRoleTextClass(user.getRoles()[0])}}">{{role_helper.roleToString(user.getRoles()[0])}}</p>
+      
+      <p class="card-text "><small class="text-muted">
+      {% if user.username == 'inti7ary' %}
+
+      eternal
+
+      {% else %}
+      Зарегистрирован {{user.regDate|date("d/m/y")}}
+      {% endif %}
+      </small></p>
+    
+    </div>
+    
+  </div>
+  
+</div>
+    {% if is_granted("ROLE_ADMIN")%}
+     
+     {% if user.getRoles()[0] == 'ROLE_USER' %}
+        <button type="button" onclick="setpriv('last_test_user', 1);" class="btn btn-danger">Повысить до модератора</button>
+      {% elseif user.getRoles() == 'ROLE_MODERATOR' %}
+      <button type="button" onclick="setpriv('last_test_user', 1);" class="btn btn-danger">Повысить до admina</button>
+      {% endif %}
+   
+{% endif %}
+  </div>
+
+    
+
+{% if is_granted("ROLE_ADMIN") and app.request.server.get('HTTP_REFERER')|slice(-13) == 'usermanagment' %}
+<button id="button-back" type="button" onclick="window.location.href='{{path("usermanagment")}}'" class="btn btn-dark mb-3">Назад</button>
+{% endif %}
+{% endblock %}

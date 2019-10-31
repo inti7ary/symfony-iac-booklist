@@ -1,0 +1,32 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %} На модерации {% endblock %}
+{% block body %}
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Название</th>
+      <th scope="col">Автор</th>
+      <th scope="col">Кем добавлена</th>
+    </tr>
+  </thead>
+  <tbody>
+
+{% set counter = 0 %}
+
+{% for book in books %}
+
+{% set counter = counter + 1 %}
+<tr>
+      <th scope="row">{{counter}}</th>
+      <td><a href="{{path("book", {id: "id"~book.id})}}" >{{book.title}}</a></td>
+      <td>{{book.author}}</td>
+      <td>{{book.addedBy}}</td>
+    </tr>
+{% endfor %}
+
+</tbody>
+
+{% endblock %}

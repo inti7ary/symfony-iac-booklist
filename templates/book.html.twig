@@ -1,0 +1,71 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %} {{ book.title }} {% endblock %}
+
+{% block body %}
+
+<div id='book-card' class="card bg-light" style="max-width: 740px;">
+	<div class="row no-gutters">
+  		<div class="col-md-4 pt-4">
+    			<img src='{{asset(book.imgUrl)}}' class="card-img" alt="...">
+  		</div>
+  		<div class="col-md-8 ">
+   			<div class="card-body">
+     				 <h3 class="card-title">{{book.title}}</h3>
+     				<span class="card-text text-muted">{{book.author}}</span>
+             </br>
+            
+            {% if book.premoderation == 1 %}
+             <small class="card-text text-info">Книга находится на модерации</small> 
+             {% else %}
+             {% for message in app.flashes("publish_note") %}
+              <div class="alert alert-success">
+              {{message}}
+              </div>
+             {% endfor %}
+             {% endif %}
+            
+      				<p class="card-text">{{book.description}}</p>
+            
+			</div>
+      
+		</div>  
+    		
+    		
+    	</div>
+
+	<div class="row no-gutters">
+		<div class="col-md-7 col-sm-6 col-0"> </div>
+		
+		<div class="col-md-5 col-sm-6 col-12">
+	<div class="row no-gutters"
+		<div id="moderator-panel"> 
+  		
+      {%if book.premoderation == 1 %}	
+    			<div id="button-publish" class="col-6">	
+              <form method="POST" action="{{path("publish_book", {id:book.id})}}">
+              <button type="submit" class="btn btn-info">Опубликовать</button> 
+              </form>
+ 		  	</div>
+			{% endif %}
+
+			
+            		{%if is_granted("ROLE_MODERATOR") %} 
+                <div id="button-remove" class="col-6">
+                <form action="{{path("delete_book", {id:book.id})}}" method="POST">
+                <button type="submit" class="btn btn-danger">Удалить</button> 
+                </form>
+                </div>  
+                {% endif %}
+            		
+	</div>
+		</div>
+		</div>
+
+	</div>
+</div>
+ 
+
+
+
+{% endblock %}

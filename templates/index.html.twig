@@ -1,0 +1,152 @@
+{% extends 'layout.html.twig' %}
+
+
+{% block title %}Главная{% endblock %}
+
+
+{% block search %} 
+<form class="search" >
+<input class="form-control mr-sm-2 search-field" type="search"  onkeyup="find(1)" placeholder="Поиск" aria-label="Search">
+</form>
+{% endblock %}
+
+{% block scripts_include %}
+<script src="{{asset('js/opennav.js')}}" type="text/javascript"></script>
+<script src="{{asset('js/search.js')}}" type="text/javascript"></script>
+{% endblock %}
+
+{% block header %}
+<button id="opennav" class="btn btn-outline-dark text-white" onclick="openNav()">&#9776;</button>
+{{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+
+<div class="sidebar-container">
+
+  <div class="sidebar-logo">
+    Категории
+  </div>
+  
+  <ul class="sidebar-navigation">
+    <li>
+      <a href="{{path("category", {category: "history"})}}">
+        <i aria-hidden="true"></i> История
+      </a>
+    </li>
+    <li>
+      <a  href="{{path("category", {category: "fantasy"})}}">
+        <i aria-hidden="true"></i> Фантастика
+      </a>
+    </li>
+    
+    <li>
+      <a  href="{{path("category", {category: "science"})}}">
+        <i aria-hidden="true"></i> Наука
+      </a>
+    </li>
+    <li>
+      <a  href="{{path("category", {category: "biography"})}}">
+        <i aria-hidden="true"></i> Биографии
+      </a>
+    </li>
+    <li>
+      <a  href="{{path("category", {category: "other"})}}">
+        <i aria-hidden="true"></i> Другое
+      </a>
+    </li>
+
+    <li>
+</li>
+  </ul>
+  <form id="side-search" class="search" >
+<input class="form-control search-field" type="search" onkeyup="find(1)" placeholder="Поиск" aria-label="Search">
+</form>
+</div>
+
+
+{% block add_book %}
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+<div class="right-container">
+<a href="{{path("addbook")}}" >
+      <img src="{{asset("img/add.png")}}" width="64px" height="64px">
+    </a>
+</div>
+{% endif %}
+ {% endblock %}
+
+
+<div class="content-container">
+
+{%block main_content %}
+
+ 
+
+
+
+ <div id="main" class="container-fluid">
+
+
+
+{% block notification %}
+<h2 id='headline' h2>Последние добавленные книги</h2>
+
+{% for message in app.flashes('delete_note') %}
+<div class="alert alert-danger">
+{{message}}
+</div>
+{% endfor %}
+
+{% for message in app.flashes('add_note') %}
+<div class="alert alert-success">
+{{message}}
+</div>
+{% endfor %}
+
+{% for message in app.flashes('add_mod_note') %}
+<div class="alert alert-warning">
+{{message}}
+</div>
+{% endfor %}
+
+{% endblock %}
+
+{% block pagination %} {% endblock %}
+
+   {%for book in books%}
+
+    <div class="card bg-light mb-3" style="max-width: 640px;">
+      <div class="row no-gutters">
+        <div class="col-md-4 book-img-container">
+          <img src="{{asset(book.imgUrl)}}" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title"><b>{{book.title}}</b></h5>
+            <p class="card-text"><small class="text-muted">{{book.author}}</small></p>
+            <p class="card-text">{{book.description}}</p>
+            <div id="button-details" class="text-lg-right">
+            <button type="button" onclick="window.location.href='{{path("book", {id: "id"~book.id})}}'" class="btn btn-success">Подробнее</button>
+            </div>
+      
+          </div>
+        </div>
+      </div>
+      </div>
+{% endfor %}
+   
+
+
+  {% block pagination_bottom %} {% endblock %}
+
+
+
+{% endblock %}
+
+</div>
+
+
+{% endblock %}
+
+
