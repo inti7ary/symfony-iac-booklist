@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
 use App\Service\FileUploader;
-use App\Form\ProfileFormType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -51,27 +50,7 @@ class ProfileController extends AbstractController{
      */
     public function profile(SessionInterface $session, FileUploader $fileUploader, Request $request){
 
-        $user = $this->getUser();
-        if(!$this->getUser()) return $this->redirectToRoute("index");
-
-
-        $form = $this->createForm(ProfileFormType::class);
-        $form->handleRequest($request);
-
-        
-        $debug = "start";
-        if($form->isSubmitted()) $debug = "finish";
-        if($form->isSubmitted() && $form->isValid()){
-            $imgUrl = $fileUploader->upload($form->get('imgUrl')->getData());
-            $entityManager = $this->getDoctrine()->getManager();
-            $updatedUser = $entityManager->getRepository(User::class)->find($this->getUser()->getId());
-            $updatedUser->setImgUrl($imgUrl);
-            $entityManager->flush();
-            
-
-        }
-
-        return $this->render('profile.html.twig', ["user" => $user, "form" => $form->createView(), "debug" => $debug]);
+        return $this->render('profile.html.twig');
         
     }
 
