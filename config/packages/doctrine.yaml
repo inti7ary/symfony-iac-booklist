@@ -3,19 +3,19 @@ doctrine:
         # configure these for your database server
         # use postgresql for PostgreSQL
         # use sqlite for SQLite
-        driver: 'mysql'
-        server_version: '5.7'
+        driver: 'postgresql'
+        server_version: '12.2'
 
         # only needed for MySQL
-        charset: utf8mb4
-        default_table_options:
-            charset: utf8mb4
-            collate: utf8mb4_unicode_ci
+        #charset: utf8mb4
+        #default_table_options:
+         #   charset: utf8mb4
+         #   collate: utf8mb4_unicode_ci
 
         url: '%env(resolve:DATABASE_URL)%'
     orm:
         auto_generate_proxy_classes: true
-        naming_strategy: doctrine.orm.naming_strategy.underscore
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
             App:

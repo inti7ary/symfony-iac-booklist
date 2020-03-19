@@ -4,3 +4,5 @@ twig:
     strict_variables: '%kernel.debug%'
     globals:
         role_helper: '@App\Service\RoleHelper'
+    ##symfony 4.4
+    exception_controller: null

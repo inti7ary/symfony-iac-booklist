@@ -1,0 +1,70 @@
+# Configuration file for the AdminLTE bundle
+#
+# For more information about the bundle settings visit:
+# https://github.com/kevinpapst/AdminLTEBundle/blob/master/Resources/docs/configurations.md
+#
+# For tabs in the control_sidebar (right screen) add the 'control_sidebar' config key:
+# https://github.com/kevinpapst/AdminLTEBundle/blob/master/Resources/docs/control_sidebar.md
+
+# admin_lte:
+#     options:
+#         skin: skin-green
+#         fixed_layout: false
+#         boxed_layout: false
+#         collapsed_sidebar: false
+#         mini_sidebar: false
+
+#     knp_menu:
+#         enable: false
+
+#     routes:
+#         adminlte_welcome: home
+#         adminlte_login: login
+#         adminlte_profile: profile
+
+admin_lte: 
+    options: 
+        default_avatar: 'bundles/adminlte/images/default_avatar.png'
+        skin: 'skin-blue'
+        fixed_layout: false
+        boxed_layout: false
+        collapsed_sidebar: false
+        mini_sidebar: false
+        form_theme: default
+        max_navbar_notifications: 5
+        max_navbar_tasks: 5
+        max_navbar_messages: 5
+        
+        
+    theme: 
+        widget: 
+            type: 'primary'
+            bordered: true
+            collapsible: false
+            collapsible_title: 'Collapse'
+            removable: false
+            removable_title: 'Remove'
+            solid: false
+            use_footer: false
+        button: 
+            type: 'primary'
+            size: false
+            
+    knp_menu: 
+        enable: false
+        main_menu: 'adminlte_main'
+        breadcrumb_menu: false
+        
+    routes: 
+        adminlte_welcome: 'home'
+        adminlte_login: 'login'
+        adminlte_login_check: 'login_check'
+        adminlte_registration: NULL
+        adminlte_password_reset: NULL
+        adminlte_message: 'message'
+        adminlte_messages: 'messages'
+        adminlte_notification: 'notification'
+        adminlte_notifications: 'notifications'
+        adminlte_task: 'task'
+        adminlte_tasks: 'tasks'
+        adminlte_profile: 'profile'

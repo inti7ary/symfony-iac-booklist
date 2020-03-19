@@ -1,0 +1,16 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %} {{ 'Автор' }} {% endblock %}
+
+{% block app %}
+ 
+<author_profile 
+
+    {% if is_granted("ROLE_MODERATOR") %}
+        :enable_editing=true
+    {% endif %}
+    
+ :id={{author_id}}></author_profile>
+
+
+{% endblock %}

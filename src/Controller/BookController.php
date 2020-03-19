@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Book;
-use App\Service\CategoryTranslator;
 use App\Service\PaginationHelper;
 use App\Form\BookFormType;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,146 +17,126 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Service\FileUploader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+use App\Repository\BookRepository;
+use Doctrine\ORM\Query;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class BookController extends AbstractController{
 
-/**
- * @Route("/book")
- */
-public function book_redirect(){
+    /**
+     * @Route("/books", name="books")
+     */
+    public function books(Request $request){
+        $page = $request->get('page') ?? 1;
 
-   return $this->redirectToRoute("index");
+        $status = $request->query->get('status');
+        $title = $request->query->get('title');
+        //$query = $request->query->get('query');
 
-}
-/**
- * @Route("/books")
- */
-public function books_redirect(){
-
-    return $this->redirectToRoute("index");
- 
- }
-/**
- * @Route("/category")
- */
-public function category_redirect(){
-
-    return $this->redirectToRoute("index");
- 
- }
-
-/**
- * @Route("/book/{id<id\d+>}", name="book")
- */
-public function book($id){
-
-    $id = substr($id, 2);
-    $repository = $this->getDoctrine()->getRepository(Book::class);
-    $book = $repository->find($id);
-    if($book->getPremoderation() == 1) $this->denyAccessUnlessGranted("ROLE_MODERATOR", $book);
-    return $this->render("book.html.twig", ["book" => $book]);
-
-}
-/**
- * @Route("/category/{category}/{page}", name="category")
- */
-public function category($category, $page = 1, CategoryTranslator $categoryTranslator, PaginationHelper $paginationHelper){
-    $categoryParam = $category;
-    $category = $categoryTranslator->translate($categoryParam);
-    $repository = $this->getDoctrine()->getRepository(Book::class);
-    $offset = 10 * (intval($page) - 1);
-    $books = $repository->findBy(array("premoderation" => 0, "genre" => $category), array("id" => 'DESC'), 10, $offset);
-    $books_num = $repository->countBooksToShow($category);
-    $pagination = $paginationHelper->getPagination($books_num, $page, 10);
-    if($pagination['pages_total'] < $page) return $this->redirectToRoute("category", ['category' => $categoryParam, 'page' => $pagination['pages_total']]);
-    $currentState = ["category" => $categoryParam, "books_num" => $books_num, "translatedCategory" =>$category];
-    return $this->render("category.html.twig", ["books" => $books, "pagination" => $pagination, "currentState" => $currentState]);
-
-}
-
-/**
- * @Route("/book/add", name="addbook")
- */
-public function addBook(Request $request, TokenStorageInterface $tokenStorage,
- AuthenticationManagerInterface $authenticationManager,
-  AccessDecisionManagerInterface $accessDecisionManager,
-  FileUploader $fileUploader) : Response{
-
-    $book = new Book();
-    $form = $this->createForm(BookFormType::class, $book);
-    $form->handleRequest($request);
-
-    if($form->isSubmitted() && $form->isValid()){
-        $authChecker = new AuthorizationChecker($tokenStorage,
-        $authenticationManager,
-        $accessDecisionManager);
-
-        $book->setTitle($form->get("title")->getData());
-        $book->setAuthor($form->get("author")->getData());
-        $book->setGenre($form->get("genre")->getData());
-        $book->setDescription($form->get("description")->getData());
-        $book->setAddedBy($this->getUser()->getUsername());
-        
-        if(($img = $form->get("imgUrl")->getData()) !== null){
-            $imgUrl = $fileUploader->upload($img);
-            $book->setImgUrl($imgUrl);
+        if($status === 'new_book_success' && $title){
+            $this->addFlash('publish_note', 'Книга "'.$title.'" успешно добавлена!');
+        }else if($status === 'book_deleted_success' && $title){
+            $this->addFlash('deletion_note', 'Книга "'.$title.'" удалена');
         }
-        else $book->setImgUrl("img/book-default.jpg");
 
-        $premoderation = ($authChecker->isGranted("ROLE_MODERATOR")) ? 0 : 1;
-        $book->setPremoderation($premoderation);
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($book);
-        $entityManager->flush();
-
-        if(!$premoderation) $this->addFlash("add_note", "Книга '".$book->getTitle()."' добавлена");
-        else $this->addFlash("add_mod_note", "Книга '".$book->getTitle()."' отправлена на модерацию");
-        return $this->redirectToRoute("index");
+        
+        return $this->render('books.html.twig', ['page' => $page]);
     }
-   
-    return $this->render("addbook.html.twig", ["form" => $form->createView()]);
-}
 
-
-/**
- * @Route("/books/moderation", name="books_moderation")
- * @IsGranted("ROLE_MODERATOR")
- */
- public function book_moderation(){
-
-    $repository = $this->getDoctrine()->getRepository(Book::class);
-    $books = $repository->findBy(array("premoderation" => 1), array("id" => "DESC"));
-
-    return $this->render("book_moderation.html.twig", ['books' => $books]);
- }
-
-
- /**
- * @Route("/books/search", name="books_search")
- */
-public function book_search(Request $request){
-
-    if($request->isXmlHttpRequest()){
-        $keyword = $request->get("keyword");
-        
-        //$books = $this->getDoctrine()->getRepository(Book::class)->findBy(array("premoderation" => 0));
-        $books = $this->getDoctrine()->getRepository(Book::class)->findByKeyword($keyword);
-        $reponse = array();
-
-        foreach($books as $book){
-            $reponse[] = array("title" => $book->getTitle(),
-            "author" => $book->getAuthor(),
-            "imgUrl" => $book->getImgUrl(),
-            "description" => $book->getDescription(),
-            "url" => $this->generateUrl("book", ["id" => "id".$book->getId()])
-        );
+    /**
+     * 
+     * @Route("/books/search", name="books_search")
+     */
+    public function booksSearch(Request $request){
+        $page = $request->get('page') ?? 1;
+        $query = $request->query->get('query');
+        $args = ['page' => $page];
+        if($query && strlen($query)){
+            $args['query'] = $query;
         }
-        return new JsonResponse($reponse);
-        
-    }else return $this->redirectToRoute("index");
 
- }
+        return $this->render('books.html.twig', $args);
+    }
+
+    /**
+     * @Route("/book")
+     */
+    public function book_redirect(){
+
+    return $this->redirectToRoute("home");
+
+    }
+
+
+    /**
+     * @Route("/books/{id<\d+>}", name="book")
+     */
+    public function showBook($id){
+
+        return $this->render("book.html.twig", ["book_id" => $id]);
+
+    }
+
+
+    /**
+     * @Route("/books/new", name="new_book")
+     */
+    public function newBook() {
+
+        return $this->render('new_book.html.twig');
+        
+    }
+
+
+    /**
+     * @Route("/books/img", methods={"POST"}, name="books_img")
+     */
+    public function postBookImg(Request $request, LoggerInterface $logger){
+        
+        $file = $request->files->get('img');
+
+        $new_file_name = uniqid('book_').substr(md5(random_bytes(10)), 0, 25).'.'.$file->guessExtension();
+
+
+        $file_path = '/img/books/book-default.jpg';
+
+        try{
+            $file->move(
+            $this->getParameter('books_img_directory'),
+            $new_file_name);
+            
+
+            $file_path ='/img/books/'.$new_file_name;
+        }catch(FileException $e){
+          
+            $logger->debug('File exception:'.$e);
+        }
+       
+
+        $response = new JsonResponse();
+
+        $response->setData(['img' => $file_path]);
+
+        return $response;
+    }
+
+    // /**
+    //  * @Route("/books/moderation", name="books_moderation")
+    //  * @IsGranted("ROLE_MODERATOR")
+    //  */
+    // public function book_moderation(){
+
+    //     $repository = $this->getDoctrine()->getRepository(Book::class);
+    //     $books = $repository->findBy(array("premoderation" => 1), array("id" => "DESC"));
+
+    //     return $this->render("book_moderation.html.twig", ['books' => $books]);
+    // }
+
+
+    
 
 }
 

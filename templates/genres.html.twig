@@ -1,0 +1,33 @@
+{% extends 'list.html.twig' %}
+
+{% block title %}
+Жанры
+{% endblock %}
+
+{% block content %}
+
+    {% for message in app.flashes("publish_note") %}
+
+        <div class="alert alert-success">
+
+              {{message}}
+              
+        </div>
+
+    {% endfor %}
+
+
+    <h2 id='headline' h2>
+        Жанры
+    </h2>
+            
+    <genre_list :page="{{page}}" :pagination=true></genre_list>
+
+{% endblock %}
+
+
+{% block new_item_link %}
+
+    {{path('new_genre')}}
+
+{% endblock %}

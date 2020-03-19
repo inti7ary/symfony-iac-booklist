@@ -1,0 +1,26 @@
+{% extends 'index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+
+    {% if is_granted("ROLE_MODERATOR") %}
+
+        {% block add_new_item %}
+            <div class="right-container">
+
+                <a href="
+
+                {% block new_item_link %}
+                  #
+                {% endblock %}
+
+                " >
+
+                    <img src="{{asset("img/add.png")}}" width="64px" height="64px">
+                </a>
+            </div>
+        {% endblock %}
+
+    {% endif %}
+
+{% endblock %}

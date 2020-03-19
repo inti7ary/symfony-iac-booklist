@@ -1,0 +1,66 @@
+{% extends 'list.html.twig' %}
+
+{% block title %}
+Книги
+{% endblock %}
+
+{% block search %}
+
+
+    <search_field 
+    {% if query is defined %}
+        :value="'{{query}}'"
+    {% endif %}
+    ></search_field>
+
+
+{% endblock %}
+
+{% block content %}
+    
+    {% for message in app.flashes("publish_note") %}
+
+        <div class="alert alert-success">
+
+              {{message}}
+              
+        </div>
+
+    {% endfor %}
+
+    
+    {% for message in app.flashes("deletion_note") %}
+
+        <div class="alert alert-danger">
+
+              {{message}}
+              
+        </div>
+
+    {% endfor %}
+    
+    <h2 id='headline' h2>
+        Книги
+    </h2>
+            
+    <book_list  
+    {% if query is defined %}
+    :search_query="'{{query}}'"
+    {% endif %}
+    :page="{{page}}" 
+    :pagination=true ></book_list>
+
+{% endblock %}
+
+
+
+{% block new_item_link %}
+   
+        {{path('new_book')}}
+
+
+{% endblock %}
+
+
+
+

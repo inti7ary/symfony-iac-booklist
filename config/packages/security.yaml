@@ -6,6 +6,7 @@ security:
     role_hierarchy:
             ROLE_MODERATOR:   ROLE_USER
             ROLE_ADMIN:       [ROLE_USER, ROLE_MODERATOR]
+            ROLE_ROOT: [ROLE_USER, ROLE_MODERATOR, ROLE_ADMIN]
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
@@ -13,16 +14,20 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: username
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: true
-            guard:
-                authenticators:
-                    - App\Security\LoginFormAuthenticator
+            anonymous: lazy
+            json_login:
+                check_path: app_login
+                username_path: email
+                password_path: password
+            # guard:
+            #     authenticators:
+            #         - App\Security\LoginFormAuthenticator
             logout:
                 path: app_logout
                 # where to redirect after logout
@@ -38,7 +43,10 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
          - { path: '^/usermanagment', roles: ROLE_ADMIN }
-         - { path: '/book/add', role: IS_AUTHENTICATED_REMEMBERED}
+         - { path: '/books/new', roles: ROLE_MODERATOR }
+         - { path: '/genres/new', roles: ROLE_MODERATOR }
+         - { path: '/authors/new', roles: ROLE_MODERATOR }
+         - { path: '/profile', roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/profile, roles: ROLE_USER }
 
   

@@ -1,0 +1,43 @@
+{% extends 'list.html.twig' %}
+
+{% block title %}
+Авторы
+{% endblock %}
+
+
+{% block content %}
+
+    {% for message in app.flashes("publish_note") %}
+
+        <div class="alert alert-success">
+
+              {{message}}
+              
+        </div>
+
+    {% endfor %}
+
+     {% for message in app.flashes("deletion_note") %}
+
+        <div class="alert alert-danger">
+
+              {{message}}
+              
+        </div>
+
+    {% endfor %}
+    
+    <h2 id='headline' h2>
+        Авторы
+    </h2>
+            
+    <author_list :pagination=true :page="{{page}}"></book_list>
+
+{% endblock %}
+
+
+{% block new_item_link %}
+
+    {{path('new_author')}}
+
+{% endblock %}
