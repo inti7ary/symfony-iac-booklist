@@ -48,7 +48,8 @@ class UserController extends AbstractController{
      */
     public function profile(){
 
-        return $this->render('profile.html.twig');
+        return $this->redirectToRoute('users', ['id' => $this->getUser()->getId()]);
+        //return $this->render('profile.html.twig');
         
     }
 

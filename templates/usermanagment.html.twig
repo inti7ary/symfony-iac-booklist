@@ -2,53 +2,9 @@
 
 {% block title %} Управление пользователями {% endblock %}
 
-{% block body %}
+{% block app %}
 
-<div id="main" class='table-container'>
-
-  
-  <table class="table">
-  <thead class="thead-light">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Логин</th>
-      <th scope="col">Статус</th>
-      <th scope="col">Дата регистрации</th>
-    </tr>
-  </thead>
-  <tbody>
-
-
-
-
-{% set counter = 0 %}
-
-{% for user in users %}
-{%set counter = counter + 1 %}
-    <tr>
-      <th scope="row">{{counter}}</th>
-      <td><a href="{{path("users", {'id': user.id}) }}">  {{user.username}}</a></td>
-      <td class='{{role_helper.getRoleTextClass(user.getRoles()[0])}}'>{{role_helper.roleToString(user.getRoles()[0])}}</td>
-      <td>
-
-      {% if user.username == 'inti7ary' %}
-        <b> eternal </b>
-      {% else %}
-      {{user.regdate|date("d/m/y")}}
-      {% endif %}
-
-      </td>
-    </tr>
-
-
-
-{% endfor %}
-  </tbody>
-</table>
- 
-
-
-</div>
+<user_list></user_list>
 
 
 {% endblock %}

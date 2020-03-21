@@ -23,14 +23,14 @@ import genre_profile from './components/GenreProfile.vue';
 import search_field from './components/SearchField.vue';
 import user_profile from './components/UserProfile.vue';
 import author_profile from './components/AuthorProfile.vue';
-
+import user_list from './components/UserList.vue';
 
 new Vue({
 
     el: '#app',
     components: {login_form, signup_form, password_restore_form,
           book_list, author_list, genre_list, genre_form, author_form, book_form,
-          book_profile, genre_profile, user_profile, author_profile}
+          book_profile, genre_profile, user_profile, author_profile, user_list}
 });
 
 new Vue({

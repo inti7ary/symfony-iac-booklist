@@ -4,8 +4,11 @@
 /.env.local.php
 /.env.*.local
 /public/bundles/
+/public/img
 /var/
 /vendor/
+.env
+/.env
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
@@ -17,3 +20,4 @@
 ###> symfony/web-server-bundle ###
 /.web-server-pid
 ###< symfony/web-server-bundle ###
+##
