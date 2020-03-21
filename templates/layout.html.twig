@@ -1,57 +1,54 @@
 {% extends "base.html.twig" %}
 
 {% block header %}
-
-
-
-
  
     {% block header_menu %} 
 
-  <a href='{{path("index")}}' class="navbar-brand" id="label" ><h1>booklist</h1></a> 
- 
-
-    {% block search %} {% endblock %}
-
-{%block right_header_pane %} 
-{%if app.user %}
-
-<div class="btn-group">
-  <button id="login-button" type="button" class="btn btn-outline-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    {{app.user.username}}
-  </button>
-  <div class="dropdown-menu dropdown-menu-right">
-    <button class="dropdown-item" onclick="window.location.href='{{path("profile")}}'" type="button">Профиль</button>
-    <button class="dropdown-item" onclick="window.location.href='{{path("app_logout")}}'" type="button">Выйти</button>
-  </div>
-</div>
-{% else %}
-<ul class="navbar-nav bd-navbar-nav flex-row">
-
-<li>
-<a href="{{path("app_signup")}}" class="navl-link" id="login-button">Регистрация</a>
-</li>
-<li>
-<a href="{{path("app_login")}}" class="navl-link" id="login-button">Вход</a>
-</li>
-</ul>
-
-{% endif %}
-
-{% endblock %}
-
-
-
-
-
-
-
+        <a href='{{path("home")}}' class="navbar-brand" id="label" ><h1>booklist</h1></a> 
 
     
+  
+        {% block search %} 
+        {% endblock %}
+
+       
+
+
+    {%block right_header_pane %}
+
+        {%if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+            <div class="btn-group">
+
+                <button id="login-button" type="button" class="btn btn-outline-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{app.user.username}}
+                </button>
+
+                <div class="dropdown-menu dropdown-menu-right">
+                  <button class="dropdown-item" onclick="window.location.href='{{path("profile")}}'" type="button">Профиль</button>
+                  <button class="dropdown-item" onclick="window.location.href='{{path("app_logout")}}'" type="button">Выйти</button>
+                </div>
+
+            </div>
+
+        {% else %}
+
+            <ul class="navbar-nav bd-navbar-nav flex-row">
+
+              <li>
+                <a href="{{path("app_signup")}}" class="navl-link" id="login-button">Регистрация</a>
+              </li>
+
+              <li>
+                <a href="{{path("app_login")}}" class="navl-link" id="login-button">Вход</a>
+              </li>
+
+            </ul>
+
+        {% endif %}
+
     {% endblock %}
 
-
-
-
+  {% endblock %}
 
 {% endblock %}

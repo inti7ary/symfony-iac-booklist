@@ -97,6 +97,10 @@ right: 10%
   background-color: #2574A9;
 }
 
+.current{
+  background: #2574A9;
+}
+
 .sidebar-navigation {
   padding: 0;
   margin: 0;
@@ -105,7 +109,7 @@ right: 10%
 }
 
 .sidebar-navigation li {
-  background-color: transparent;
+  /* background-color: transparent; */
   position: relative;
   display: inline-block;
   width: 100%;
@@ -123,11 +127,14 @@ right: 10%
   margin-right: 10px;
 }
 
+
+
 .sidebar-navigation li a:active,
 .sidebar-navigation li a:hover,
 .sidebar-navigation li a:focus {
   text-decoration: none;
   outline: none;
+
 }
 
 .sidebar-navigation li::before {
@@ -145,6 +152,7 @@ right: 10%
 
 .sidebar-navigation li:hover::before {
   width: 100%;
+  
 }
 
 .sidebar-navigation .header {
@@ -164,9 +172,11 @@ right: 10%
 }
 
 
-.search{
+#search{
 margin: auto auto auto 10%;
 }
+
+
 
 #side-search{
 margin: 2% 2% 2% 5%;
@@ -174,7 +184,13 @@ max-width: 85%;
 display: none;
 }
 
+#verification-code{
+  padding-top: 15%;
+}
 
+#verification-code-input{
+  text-transform:uppercase;
+}
 
 #login-button{
 
@@ -214,7 +230,7 @@ font-weight: bold;
 #book-card{
 max-width: 420px;
 padding: 1em;
-margin: 10% auto;
+margin: 5% auto;
 
 }
 
@@ -243,11 +259,12 @@ border-radius: 50%;
 }
 
 #headline{
-padding-bottom: 5%;
+padding-bottom: 3%;
+padding-left: 2%;
 }
 
 #button-details{
-padding-top: 10%;
+padding-top: 20%;
 
 }
 #form-book-add{
@@ -311,7 +328,7 @@ display: inherit;
 max-width: 0%;
 }
 
-.search{
+#search{
 display: none;
 margin: 0;
 max-width: 30%;

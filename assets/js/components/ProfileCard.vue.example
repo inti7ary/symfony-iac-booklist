@@ -1,0 +1,44 @@
+
+
+
+
+<div id='profile-card' class="card bg-light" style="max-width: 640px;">
+<div class="row no-gutters jumbotron">
+  <div class="col-md-6">
+    <img src='{{asset(user.img)}}' class="card-img" alt="...">
+    
+    <div class="custom-file mt-3">
+    {{form_start(form)}}
+    {{ form_row(form._token)}}
+
+{{ form_widget(form.imgUrl, {'attr': {'class': 'custom-file-input'}}) }}
+	<label class="custom-file-label"  for="customFile">Загрузить фото</label>
+    <span class="invalid-feedback d-block"> {{ form_errors(form.imgUrl)}} </span>
+  <input type="submit" class="btn btn-info" value="Обновить фото" name="submit">
+
+  {{ form_end(form)}}
+</div>
+
+
+  </div>
+  <div class="col-md-5 ">
+    <div class="card-body">
+      <h3 class="card-title">{{user.username}}</h3>
+      <p class="card-text {{role_helper.getRoleTextClass(user.getRoles()[0])}}">{{role_helper.roleToString(user.getRoles()[0])}}</p>
+      
+      <p class="card-text "><small class="text-muted">Зарегистрирован {{user.regDate|date("d/m/y")}}</small>
+    
+    </div>
+    
+  </div>
+</div>
+
+{% if is_granted("ROLE_ADMIN") %}
+
+<button type="button" onclick="window.location.href='{{path("usermanagment")}}'" class="btn btn-info">Управление пользователями</button> 
+
+{% endif %}
+    
+  </div>
+
+

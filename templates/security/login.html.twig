@@ -2,42 +2,16 @@
 
 {% block title %}Вход{% endblock %}
 
+
+
 {% block right_header_pane %} <a href="{{path("app_signup")}}" class="navl-link" id="login-button">Регистрация</a> {% endblock %}
  
-{% block body %}
-
-
+{% block app %}
 
 <div class="wrapper">
-        <h2>Вход</h2>
-        <p>Заполните поля, чтобы войти на сайт</p>
-        <form method="post">
+<login_form></login_form>
+</div>
 
-        <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}">
-           
-    <div class="form-group">
-                <label>Логин</label>
-                <input type="text" name="username" class="form-control {% if error and error.code == 1 %} is-invalid{% endif %}" value="{{ last_username }}" placeholder="Логин">
-		{% if error and error.code == 1 %}
-                <span class="invalid-feedback d-block">{{error.message}}</span>
-		{% endif %}
-    </div>    
-    <div class="form-group">
-                <label>Пароль</label>
-                <input type="password" name="password" class="form-control {% if error and error.code == 2 %} is-invalid {% endif %}" placeholder="Пароль">
-                {% if error and error.code == 2 %}
-                <span class="invalid-feedback d-block">{{error.message}}</span>
-		{% endif %}
-            </div>
-    <div class="form-group">
-
-                <input type="submit" class="btn btn-primary" value="Вход">
-    </div>
-            <span>Ещё нет аккаунта? <a href="{{path("app_signup")}}">Регистрация</a></span>
-        </form>
-</div>   
-
-
- 
 {% endblock %}
+
+

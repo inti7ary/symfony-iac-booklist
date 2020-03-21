@@ -27,7 +27,7 @@
 {%set counter = counter + 1 %}
     <tr>
       <th scope="row">{{counter}}</th>
-      <td><a href="{{ path("user", {id: "id"~user.id}) }}" >  {{user.username}}</a></td>
+      <td><a href="{{path("users", {'id': user.id}) }}">  {{user.username}}</a></td>
       <td class='{{role_helper.getRoleTextClass(user.getRoles()[0])}}'>{{role_helper.roleToString(user.getRoles()[0])}}</td>
       <td>
 

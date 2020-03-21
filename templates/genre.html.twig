@@ -1,0 +1,14 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %} {{ 'Жанр' }} {% endblock %}
+
+{% block app %}
+ 
+<genre_profile 
+    {% if is_granted("ROLE_MODERATOR") %}
+        :enable_editing=true
+    {% endif %}
+:id={{genre_id}}></genre_profile>
+
+
+{% endblock %}
